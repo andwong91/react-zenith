@@ -1,0 +1,17 @@
+service: ClientDeployService
+
+provider:
+  environment: ${file(env.yml):${self:custom.stage}}
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: ${self:provider.environment.REGION}
+
+plugins:
+  - serverless-finch
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  client:
+    bucketName: ${self:provider.environment.DEPLOY_BUCKET}
+    distributionFolder: build
